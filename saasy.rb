@@ -27,6 +27,7 @@ bot = Cinch::Bot.new do
     @counter = 11
     @startTime = Time.now
     @token = 1235
+    @siteName = 'http://salesforce-knowledge-base.heroku.com/'
   end
 
   helpers do
@@ -117,7 +118,7 @@ bot = Cinch::Bot.new do
     User(m.user).send 'v 0.75 : !safeharbor added'
     User(m.user).send 'v 0.8 : Logs to simple-frost-403.heroku.com'
     User(m.user).send 'v 0.85 : !uptime command. Log only last 100 messages. !site. Added tags '
-    User(m.user).send 'v 0.90 : Security token.  '
+    User(m.user).send 'v 0.90 : Security token. !alltime. '
 
   end
 
@@ -198,12 +199,14 @@ bot = Cinch::Bot.new do
     userString = userString[0,userString.length - 5]          
     if count > 0    
     
-        url = 'http://simple-frost-403.heroku.com/messages/create/'
+        url =  @siteName + '/messages/create/'
         url += CGI.escape(userString)
         url += '/'
         url += CGI.escape(contentString)
         url += '/'
         url += CGI.escape(tagString)
+        url += '/'
+        url += token
 
         open(url)
 
@@ -229,7 +232,7 @@ bot = Cinch::Bot.new do
     msg = m.message[/[\w\d\s\W]+/]
     msg = msg[1,msg.length]
     
-    url = 'http://simple-frost-403.heroku.com/messages/create/'
+    url = @siteName + '/messages/create/'
     url += CGI.escape(m.user.nick)
     url += '/'
     url += CGI.escape(msg)
