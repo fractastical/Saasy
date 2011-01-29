@@ -2,6 +2,7 @@ require 'cinch'
 require 'open-uri'
 require 'nokogiri'
 require 'cgi'
+require 'token'
 
 class GoogleResult < Struct.new(:title, :link, :desc)
   def to_s
@@ -26,7 +27,7 @@ bot = Cinch::Bot.new do
     @logEntries = Array.new
     @counter = 11
     @startTime = Time.now
-    @token = 1235
+    @token = Token.to_s
     @siteName = 'http://salesforce-knowledge-base.heroku.com/'
   end
 
@@ -118,7 +119,7 @@ bot = Cinch::Bot.new do
     User(m.user).send 'v 0.75 : !safeharbor added'
     User(m.user).send 'v 0.8 : Logs to simple-frost-403.heroku.com'
     User(m.user).send 'v 0.85 : !uptime command. Log only last 100 messages. !site. Added tags '
-    User(m.user).send 'v 0.90 : Security token. !alltime. '
+    User(m.user).send 'v 0.90 : Security token.'
 
   end
 
@@ -161,7 +162,7 @@ bot = Cinch::Bot.new do
   end
 
   on :message, /^!site/ do |m|
-    m.reply 'http://simple-frost-403.heroku.com/'     
+    m.reply  @siteName     
   end
 
   on :message, /^!log (.+)/ do |m, query|
@@ -206,7 +207,7 @@ bot = Cinch::Bot.new do
         url += '/'
         url += CGI.escape(tagString)
         url += '/'
-        url += token
+        url += @token
 
         open(url)
 
@@ -221,15 +222,15 @@ bot = Cinch::Bot.new do
   end
     
 
-  on :message, /^!l / do |m, tag1|
+  on :message, /^!l (.+)/ do |m, query|
 
-    tags = m.message.scan(/\B#\w*[A-Za-z_]+\w*/)
+    tags = query.scan(/\B#\w*[A-Za-z_]+\w*/)
     #tags.delete('#salesforce')
     tagString = ''
     
     tags.each{ |x| tagString += x.to_s + ' ' }
-    @logEntries.push(LogEntry.new(m.user.nick, m.message[/[\w\d\s\W]+/], tags, Time.now))
-    msg = m.message[/[\w\d\s\W]+/]
+    @logEntries.push(LogEntry.new(m.user.nick, query[/[\w\d\s\W]+/], tags, Time.now))
+    msg = query[/[\w\d\s\W]+/]
     msg = msg[1,msg.length]
     
     url = @siteName + '/messages/create/'
@@ -239,8 +240,8 @@ bot = Cinch::Bot.new do
     url += '/'
     url += CGI.escape(tagString)
     url += '/'
-    url += token
-        
+    url += @token
+      
     open(url)
     
     if tagString != ''
