@@ -2,19 +2,13 @@ require 'cinch'
 require 'open-uri'
 require 'nokogiri'
 require 'cgi'
-require 'token'
 
-class GoogleResult < Struct.new(:title, :link, :desc)
-  def to_s
-    CGI.unescape_html "#{title} - #{desc} (#{link})"
-  end
-end
+require './token'
 
-class LogEntry < Struct.new(:author, :content, :tags, :timestamp)
-  def to_s
-    "#{author} said: #{content} at #{timestamp.asctime}"
-  end
-end
+require './classes/googleresult'
+require './classes/logentry'
+
+#token holds unique token and is not included in git
 
 
 bot = Cinch::Bot.new do

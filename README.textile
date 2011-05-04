@@ -1,0 +1,4 @@
+
+A little bot I built for the #salesforce IRC channel on Freenote.
+
+Uses Cinch.
