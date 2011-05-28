@@ -1,4 +1,17 @@
-
 A little bot I built for the #salesforce IRC channel on Freenote.
 
 Uses Cinch.
+
+Here is my to do list if I ever have some time:
+
+X (1) Implement tags
+(2) Find Message length
+X (3) Capture whole message chain of discussion
+(4) turn off edit on heroku
+(5) Default to 15 messages ?
+(6) Provide arg for messages ?
+(7) Change name on heroku
+X (8) Name Rails app 
+   -get advice
+X (9) Uptime note 
+(10) move google stuff to plugin in Cinch 
